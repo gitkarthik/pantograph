@@ -70,3 +70,7 @@ app.js       Simulation, solver, rendering and UI
 ## Deployment
 
 The site is served by GitHub Pages from the root of the `main` branch. Pushing to `main` redeploys it automatically.
+
+## License
+
+[MIT](LICENSE) © 2026 Karthik Kandasamy
