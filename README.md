@@ -4,6 +4,8 @@
 
 **Live:** https://gitkarthik.github.io/pantograph/
 
+[![Pantograph Studio: a 1:2 pantograph tracing a star, with the red pen drawing a half-size copy](docs/screenshot.png)](https://gitkarthik.github.io/pantograph/)
+
 ## Features
 
 - **Build your own linkage:** take bars from the parts tray (4 to 16 hole-spaces long) and join them by dropping one hole onto another. Holes are evenly spaced, so ratios line up.
