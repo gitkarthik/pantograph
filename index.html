@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pantograph Studio</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <aside id="sidebar">
+    <header class="brand">
+      <svg viewBox="0 0 40 40" width="30" height="30" aria-hidden="true">
+        <g stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none">
+          <path d="M5 32 L18 10 L35 32" />
+          <path d="M11.5 21 L20 32 L26.5 21" />
+        </g>
+        <circle cx="5" cy="32" r="3.2" fill="#d9480f" />
+        <circle cx="20" cy="32" r="3" fill="#1d4ed8" />
+        <circle cx="35" cy="32" r="3" fill="none" stroke="#e8590c" stroke-width="2" />
+      </svg>
+      <div>
+        <h1>Pantograph Studio</h1>
+        <p>Build it, pin it, trace it.</p>
+      </div>
+    </header>
+
+    <section>
+      <h2>Tools</h2>
+      <div class="tools" id="tools">
+        <button data-mode="build" title="Build / move (V)"><span class="ic">✥</span>Build<kbd>V</kbd></button>
+        <button data-mode="pin" title="Pin a hole (P)"><span class="ic pin-ic">●</span>Pin<kbd>P</kbd></button>
+        <button data-mode="tracer" title="Place tracer (T)"><span class="ic tracer-ic">◎</span>Tracer<kbd>T</kbd></button>
+        <button data-mode="pen" title="Place pen (N)"><span class="ic pen-ic">✎</span>Pen<kbd>N</kbd></button>
+        <button data-mode="remove" title="Remove (X)"><span class="ic">✕</span>Remove<kbd>X</kbd></button>
+        <button data-mode="image" title="Move / resize image (I)"><span class="ic">▣</span>Image<kbd>I</kbd></button>
+        <button data-mode="draw" class="wide primary" title="Trace and draw (D)"><span class="ic">✍</span>Trace &amp; Draw<kbd>D</kbd></button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Parts tray</h2>
+      <p class="sub">Click a bar to put it on the table. Holes are spaced evenly so ratios line up.</p>
+      <div class="tray" id="tray"></div>
+    </section>
+
+    <section>
+      <h2>Quick assemble</h2>
+      <div class="row">
+        <select id="presetScale" aria-label="Pantograph type">
+          <optgroup label="Same way up">
+            <option value="scale:0.25">Shrink 1 : 4</option>
+            <option value="scale:0.3333333">Shrink 1 : 3</option>
+            <option value="scale:0.5" selected>Shrink 1 : 2</option>
+            <option value="scale:0.6666667">Shrink 2 : 3</option>
+            <option value="scale:1.5">Enlarge 3 : 2</option>
+            <option value="scale:2">Enlarge 2 : 1</option>
+            <option value="scale:3">Enlarge 3 : 1</option>
+          </optgroup>
+          <optgroup label="Upside-down (turned 180°)">
+            <option value="flip:1">Upside-down, same size</option>
+            <option value="flip:0.5">Upside-down, shrink 1 : 2</option>
+            <option value="flip:2">Upside-down, enlarge 2 : 1</option>
+          </optgroup>
+          <optgroup label="Tilted (same size)">
+            <option value="tilt:15">Tilt right 15°</option>
+            <option value="tilt:30">Tilt right 30°</option>
+            <option value="tilt:-15">Tilt left 15°</option>
+            <option value="tilt:-30">Tilt left 30°</option>
+            <option value="tilt:90">Turn right 90°</option>
+            <option value="tilt:-90">Turn left 90°</option>
+          </optgroup>
+        </select>
+        <button id="presetBtn" class="btn">Assemble</button>
+      </div>
+      <p class="sub">A flat linkage can scale, tilt and turn a drawing, but it can't mirror it or slant it like italic text.</p>
+    </section>
+
+    <section>
+      <h2>Build checklist</h2>
+      <ul class="checklist" id="checklist"></ul>
+    </section>
+
+    <section>
+      <h2>Image to trace</h2>
+      <label class="btn file">
+        <input type="file" id="imageInput" accept="image/*" hidden />
+        Upload image…
+      </label>
+      <p class="sub">…or drop an image file onto the table.</p>
+      <div class="row">
+        <label class="lbl" for="imgOpacity">Opacity</label>
+        <input type="range" id="imgOpacity" min="0.1" max="1" step="0.05" value="0.6" />
+      </div>
+      <button id="imgRemove" class="btn ghost">Remove image</button>
+    </section>
+
+    <section>
+      <h2>Pens &amp; drawing</h2>
+      <div class="pen-list" id="penList"></div>
+      <div class="row">
+        <label class="lbl" for="penWidth">Width</label>
+        <input type="range" id="penWidth" min="1" max="10" step="0.5" value="2.5" />
+      </div>
+      <label class="check"><input type="checkbox" id="showGuides" checked /> Show tracer path</label>
+      <div class="row gap">
+        <button id="undoBtn" class="btn ghost">Undo stroke</button>
+        <button id="clearInk" class="btn ghost">Clear drawing</button>
+      </div>
+      <button id="savePng" class="btn">Save drawing (PNG)</button>
+    </section>
+
+    <section>
+      <button id="resetAll" class="btn danger">Clear the table</button>
+    </section>
+  </aside>
+
+  <main id="stage">
+    <canvas id="board"></canvas>
+    <div id="hint" class="hint"></div>
+    <div id="hud" class="hud"></div>
+    <div id="toast" class="toast"></div>
+    <div id="empty" class="empty">
+      <h3>Your table is empty</h3>
+      <p>Take bars from the <b>Parts tray</b> and join their holes to build your own pantograph, or start with a ready-made one.</p>
+      <div class="row gap center">
+        <button id="emptyPreset" class="btn">Assemble a 1 : 2 pantograph</button>
+        <button id="emptyDismiss" class="btn ghost">I'll build it myself</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
