@@ -109,6 +109,7 @@ h2 {
 .row input[type=range] { flex: 1; accent-color: var(--ink); }
 select {
   flex: 1;
+  min-width: 0;   /* let it shrink below its longest option so the row fits */
   font: inherit; font-size: 13px;
   padding: 6px 8px;
   border: 1px solid var(--line);
